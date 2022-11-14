@@ -1,11 +1,10 @@
 import pokemon_scanner
-import email_sender
 
 
 def main():
     results = pokemon_scanner.main()
     top5 = top_five(results)
-    email_sender.main(top5)
+    print(top5)
 
 
 def top_five(results):

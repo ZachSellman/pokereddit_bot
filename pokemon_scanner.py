@@ -42,7 +42,7 @@ def check_posts():
         for pokemon in pokemon_list:
             if (
                 pokemon in submission.title.lower()
-                or pokemon in submission.body.lower()
+                or pokemon in submission.selftext.lower()
             ):
                 add_pokemon(pokemon)
 
