@@ -8,7 +8,7 @@ client_secret = getenv("CLIENT_SECRET")
 username = getenv("NAME")
 pwd = getenv("PASSWORD")
 client_id = getenv("CLIENT_ID")
-user_agent = getenv("USER_AGENT")
+user_agent = "Pokemon_Bot (by u/OmnicBoy)"
 
 reddit = praw.Reddit(
     client_id=client_id,
