@@ -82,7 +82,6 @@ metapod
 mew
 mewtwo
 mr. mime
-missingno.
 moltres
 muk
 nidoking
