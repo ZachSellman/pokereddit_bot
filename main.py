@@ -1,6 +1,6 @@
+from os import getenv
 import praw
 import dotenv
-from os import getenv
 from pokemon_class import Pokemon
 from top_five import get_top_five
 
@@ -20,14 +20,14 @@ reddit = praw.Reddit(
     username=USERNAME,
 )
 
-with open("pokemon_list.txt") as file:
+with open("pokemon_list.txt", encoding="UTF-8") as file:
     pokemon_list = [line.strip() for line in file.readlines()]
 
 mentioned = {}
 
 
 def main():
-    """Calls check_posts() for pokemon mentions, then calls get_top_five to generate results, and prints each object."""
+    """Gets data from check_posts, and prints results of get_top_five"""
     check_posts()
     results = get_top_five(mentioned)
     for pokemon in results:
@@ -35,7 +35,7 @@ def main():
 
 
 def check_posts():
-    """Checks all posts made in past 24 hours on r/pokemon for mentions of pokemon in pokemon_list.txt, then outputs them and their comment/post ID to poke_data."""
+    """Pulls data from r/pokemon submissions in last 24 hours. Calls poke_data on located data."""
     submission_count = 0
     comment_count = 0
     for submission in reddit.subreddit("Pokemon").top(time_filter="day", limit=None):
@@ -54,7 +54,7 @@ def check_posts():
             for pokemon in pokemon_list:
                 if pokemon in comment.body.lower():
                     poke_data(pokemon, comment_id=comment.id)
-    print(f"Finished checking submissions and comments!")
+    print("Finished checking submissions and comments!")
     print(f"Submissions checked: {submission_count}")
     print(f"Comments checked: {comment_count}")
 
