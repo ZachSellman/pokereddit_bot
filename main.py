@@ -1,3 +1,9 @@
+"""Module designed to take data from r/pokemon, create obj instances, and print the results.
+
+:return: Returns None
+:rtype: None
+"""
+
 from os import getenv
 import praw
 import dotenv
