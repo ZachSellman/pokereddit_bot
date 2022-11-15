@@ -2,7 +2,6 @@ from os import getenv
 import praw
 import dotenv
 from pokemon_class import Pokemon
-from top_five import get_top_five
 
 dotenv.load_dotenv()
 
@@ -78,6 +77,25 @@ def poke_data(name: str, comment_id=None, sub_id=None):
         mentioned[name].add_comment_id(comment_id)
     else:
         mentioned[name].add_submission_id(sub_id)
+
+
+def get_top_five(_n: dict):
+    """Takes param n and outputs the top five most "mentioned" objects in n into a list.
+
+    :param n: dictionary with pokemon objects as values
+    :type mentioned: dict
+    :return: List of top five most mentioned Pokemon objects
+    :rtype: list
+    """
+    new_dict = {}
+    for value in _n.values():
+        mentions = value.mentions
+        new_dict[value] = mentions
+    sorted_new_dict = dict(
+        sorted(new_dict.items(), key=lambda item: item[1], reverse=True)
+    )
+    top_five = list(sorted_new_dict)
+    return top_five[:5]
 
 
 if __name__ == "__main__":
