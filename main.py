@@ -1,23 +1,23 @@
 import praw
 import dotenv
 from os import getenv
-from Pokemon_class import Pokemon
+from pokemon_class import Pokemon
 from top_five import get_top_five
 
 dotenv.load_dotenv()
 
-client_secret = getenv("CLIENT_SECRET")
-username = getenv("NAME")
-pwd = getenv("PASSWORD")
-client_id = getenv("CLIENT_ID")
-user_agent = "Pokemon_Bot (by u/OmnicBoy)"
+CLIENT_SECRET = getenv("CLIENT_SECRET")
+USERNAME = getenv("NAME")
+PASSWORD = getenv("PASSWORD")
+CLIENT_ID = getenv("CLIENT_ID")
+USER_AGENT = "Pokemon_Bot (by u/OmnicBoy)"
 
 reddit = praw.Reddit(
-    client_id=client_id,
-    client_secret=client_secret,
-    password=pwd,
-    user_agent=user_agent,
-    username=username,
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SECRET,
+    password=PASSWORD,
+    user_agent=USER_AGENT,
+    username=USERNAME,
 )
 
 with open("pokemon_list.txt") as file:
@@ -27,11 +27,11 @@ mentioned = {}
 
 
 def main():
-    """Calls check_posts() for pokemon mentions, then calls get_top_five to generate results, and prints each object." """
+    """Calls check_posts() for pokemon mentions, then calls get_top_five to generate results, and prints each object."""
     check_posts()
     results = get_top_five(mentioned)
     for pokemon in results:
-        print(pokemon)
+        print(pokemon.get_mentions())
 
 
 def check_posts():
@@ -70,19 +70,14 @@ def poke_data(name: str, comment_id=None, sub_id=None):
     :type sub_id: str
     :returns: None
     """
-    if name in mentioned:
-        mentioned[name].add_mention()
-        if comment_id:
-            mentioned[name].add_comment_id(comment_id)
-        else:
-            mentioned[name].add_submission_id(sub_id)
-
-    else:
+    if name not in mentioned:
         mentioned[name] = Pokemon(name)
-        if comment_id:
-            mentioned[name].add_comment_id(comment_id)
-        else:
-            mentioned[name].add_submission_id(sub_id)
+
+    mentioned[name].add_mention()
+    if comment_id:
+        mentioned[name].add_comment_id(comment_id)
+    else:
+        mentioned[name].add_submission_id(sub_id)
 
 
 if __name__ == "__main__":
