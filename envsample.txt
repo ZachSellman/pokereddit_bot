@@ -1,0 +1,4 @@
+NAME = (your reddit username)
+PASSWORD = (your reddit password)
+CLIENT_ID = (your script-application ID)
+CLIENT_SECRET = (your script-application secret)

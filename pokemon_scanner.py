@@ -1,34 +1,32 @@
-# scanner scans r/pokemon for mentions of pokemon
 import praw
 import dotenv
 from os import getenv
 
-### global variables below this line ###
-
 dotenv.load_dotenv()
 
-client_secret = getenv("SECRET_TOKEN")
+client_secret = getenv("CLIENT_SECRET")
 username = getenv("NAME")
-pwd = getenv("PWD")
+pwd = getenv("PASSWORD")
 client_id = getenv("CLIENT_ID")
+user_agent = "Pokemon_Bot (by u/OmnicBoy)"
 
 reddit = praw.Reddit(
     client_id=client_id,
     client_secret=client_secret,
     password=pwd,
-    user_agent="Rock_Bot (by u/OmnicBoy)",
+    user_agent=user_agent,
     username=username,
 )
 
 with open("pokemon_list.txt") as file:
-    pokemon_list = [x.lower() for x in file.read().split()]
+    pokemon_list = [line.strip() for line in file.readlines()]
 
 pokemon_mentions = {}
 
 
 def main():
-    """Doc String go HERE"""
     check_posts()
+    print(pokemon_mentions)
     return pokemon_mentions
 
 
@@ -36,6 +34,7 @@ def check_posts():
     """Iterates through all r/pokemon submissions from past 24 hours, adding to pokemon_mentions"""
     submission_count = 0
     comment_count = 0
+
     for submission in reddit.subreddit("Pokemon").top(time_filter="day", limit=None):
         submission.comments.replace_more(limit=None)
         submission_count += 1
@@ -52,8 +51,6 @@ def check_posts():
             for pokemon in pokemon_list:
                 if pokemon in comment.body.lower():
                     add_pokemon(pokemon)
-                else:
-                    continue
 
     print(f"Finished checking submissions and comments!")
     print(f"Submissions title/body checked: {submission_count}")
