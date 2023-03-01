@@ -17,7 +17,7 @@ PASSWORD = getenv("PASSWORD")
 CLIENT_ID = getenv("CLIENT_ID")
 USER_AGENT = "Pokemon_Bot (by u/OmnicBoy)"
 
-reddit = praw.Reddit(
+REDDIT = praw.Reddit(
     client_id=CLIENT_ID,
     client_secret=CLIENT_SECRET,
     password=PASSWORD,
@@ -28,13 +28,13 @@ reddit = praw.Reddit(
 with open("pokemon_list.txt", encoding="UTF-8") as file:
     pokemon_list = [line.strip() for line in file.readlines()]
 
-mentioned = {}
+MENTIONED = {}
 
 
 def main():
     """Gets data from check_posts, and prints results of get_top_five"""
     check_posts()
-    results = get_top_five(mentioned)
+    results = get_top_five(MENTIONED)
     for pokemon in results:
         print(pokemon.get_mentions())
 
@@ -43,7 +43,7 @@ def check_posts():
     """Pulls data from r/pokemon submissions in last 24 hours. Calls poke_data on located data."""
     submission_count = 0
     comment_count = 0
-    for submission in reddit.subreddit("Pokemon").top(time_filter="day", limit=None):
+    for submission in REDDIT.subreddit("Pokemon").top(time_filter="day", limit=None):
         submission.comments.replace_more(limit=None)
         submission_count += 1
         for pokemon in pokemon_list:
@@ -75,14 +75,14 @@ def poke_data(name: str, comment_id=None, sub_id=None):
     :type sub_id: str
     :returns: None
     """
-    if name not in mentioned:
-        mentioned[name] = Pokemon(name)
+    if name not in MENTIONED:
+        MENTIONED[name] = Pokemon(name)
 
-    mentioned[name].add_mention()
+    MENTIONED[name].add_mention()
     if comment_id:
-        mentioned[name].add_comment_id(comment_id)
+        MENTIONED[name].add_comment_id(comment_id)
     else:
-        mentioned[name].add_submission_id(sub_id)
+        MENTIONED[name].add_submission_id(sub_id)
 
 
 def get_top_five(_n: dict):
